@@ -393,3 +393,35 @@ void Delete_addr(void)
 		printf("\n\n검색된 주소 데이터를 삭제하였습니다.\n\n");
 	}
 }
+
+void Print_addr(void)
+{
+	int count = 1;
+	ADDR* plocal;
+
+	SetHeadPosition();
+
+	plocal = g_pAddrHead;
+
+	//plocal 리스트의 맨 처음으로 이동
+	whiile(plocal->prev)
+	{
+		plocal = plocal->prev;
+	}
+
+	printf("\n\n");
+
+	//한개씩 출력
+	while (plocal)
+	{
+		printf("번호.%d\n", count++);
+		puts(plocal->name);
+		puts(plocal->tel);
+		printf("%s \n\n", plocal->addr);
+
+		printf("아무키나 누르세요,(정지:q)\n\n");
+		if (getch() == 'q')return;
+
+		plocal = plocal->next;
+	}
+}
