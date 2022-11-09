@@ -1,0 +1,324 @@
+#pragma warning(disable:4996)
+#include<stdio.h>
+#include<string.h>
+#include<conio.h> //getch
+
+#define ADDRFILE "c:addrlist.txt"
+
+typedef struct tagLinkedList
+{
+	char name[30];/*이름*/
+	char tel[30]; /*전화*/
+	char addr[100];/*주소*/
+
+	struct tagLinkedList* prev;
+	struct tagLinkedList* next;
+}ADDR;
+
+ADDR* g_gAddrHead = NULL;
+ADDR* g_Find;
+int g_bSaved = 1;
+
+void get_addrlist(void);
+int add_list(const ADDR* addr);
+int find_list(const char* name)
+void SetheadPosition(void);
+void SetTailPosition(void);
+
+void Add_addr(void);
+void Find_addr(void);
+void Modify_addr(void);
+void Delete_addr(void);
+void Print_addr(void);
+void Save_addr(void);
+void Remove_addr(void);
+
+void main(void)
+{
+	int ch;
+
+	get_addlist();
+
+	puts("주소록 프로그램");
+
+	while (1) {
+		print("\n[1]등록[2]검색[3]수정[4]삭제[5]출력[S]저장[Q]종료");
+
+		ch = getch();
+
+		switch (ch)
+		{
+		case '1':Add_addr(); break;
+		case '2':Find_addr(); break;
+		case '3':Modify_addr(); break;
+		case '4':Delete_addr(); break;
+		case '5':Print_addr(); break;
+		case 's':
+		case 'S':Save_addr(); break;
+		case 'q':
+		case 'Q':
+			if (g_bSaved == 0)
+			{
+				printf("\n\n변경된 주소 데이터를 저장하시겠습니까(y/n)?");
+				ch = getchar();
+				if (ch == 'Y' || ch == 'y')Save_addr();
+			}
+
+			Remove_addr(); return;
+		default:printf("\n\n1~5 또는 S/Q를 누르십시오.\n\n"); break;
+		}
+	}
+}
+
+void get_addrlist(void)
+{
+	ADDR addr;
+	FILE* fp;
+
+	fp = fopen(ADDRFILE, "rb");
+
+	if (fp == NULL)
+	{
+		perror("파일 개방 에러");
+		return;
+	}
+
+	while (!feof(fp))
+	{
+		fread(&addr, sizeof(ADDR), 1, fp);
+
+		if (ferror(fp))
+		{
+			fclose(fp);
+			perror("파일 읽기 에러");
+			return:
+		}
+
+		if (feof(fp))break;
+
+		if (add_list(&addr) == 0)
+		{
+			printf("주소 데이터를 저장할 수 업습니다.\n");
+		}
+	}
+	fclose(fp);
+}
+
+int add_list(const ADDR* addr)
+{
+	ADDR* plocal, * pn = g_pAddrHead;
+	SetHeadPosition();
+
+	/*g_oAddHead가 초기화 되지 않은 경우,한 번만 실행됩니다.*/
+	if (g_pAddrHead == NULL)
+	{
+		plocal = malloc(sizeof(ADDR));/*ADDR 구조체 할당*/
+		memset(plocal, 0, sizeof(ADDR));
+
+		if (plocal == NULL)
+		{
+			return 0;
+		}
+
+		g_pAddrHead = plocal;
+		g_pAddrHead->prev = NULL;/*처음에는  반드시 NULL로 초기화*/
+		g_pAddrHead->next = NULL;/*처음에는 반드시 NULL로 초기화*/
+	}
+	else /*g_AddrHead가 최기화된 후 계속 실행됩니다.*/
+	{
+		plocal = malloc(sizeof(ADDR));/*ADDR 구조체 할당*/
+		memset(plocal, 0, sizeof(ADDR));
+
+		if (plocal == NULL)
+		{
+			return 0;
+		}
+
+		while (pn->next)
+		{
+			pn = pn->next;
+		}
+
+		pn->next = plocal;
+		plocal->prev = pn;
+		plocal->next = NULL;
+	}
+
+	strcpy(plocal->name, addr->name);
+	strcpy(plocal->tel, addr->tel);
+	strcpy(plocal->addr, addr->addr);
+	return 1;
+}
+
+void SetHeadPosition(void)
+{
+	if (g_pAddrHead == NULL)return;
+
+	while (g_pAddrHead->prev)
+	{
+		g_pAddrHead = g_pAddHead->prev;
+	}
+}
+
+void SetTailPosition(void)
+{
+	if (g_pAddHead == NULL)return;
+
+	while (g_pAddrHead->next)
+	{
+		g_pAddrHead = g_pAddrHead->next;
+	}
+}
+
+int find_list(const char* name)
+{
+	ADDR* plocal;
+
+	SetHeadPosition(); /*g_AddrHead를 첫 주소 데이터를 가리키도록 지정*/
+
+	plocal = g_pAddrHead;
+
+	while (plocal)
+	{
+		if (strstr(plocal->name, name)) /*이름을 검색*/
+		{
+			g_pFind = plocal;
+			return 1;
+		}
+		plocal = plocal->next;
+	}
+	return 0;
+}
+
+void Add_addr(void)
+{
+	ADDR addr;
+
+	memset(&addr, 0, sizeof(ADDR));
+
+	printf("\n\n등록할 이름: "); gets(addr.name);
+
+	if (strlen(addr.name) == 0)return;
+
+	printf("등록할 전화 : "); gets(addr.tel);
+	printf("등록할 주소 : "); gets(addr.addr);
+
+	if (find_list(addr.name) == 1)
+	{
+		printf("\n이미 등록되어 있는 이름입니다\n\n");
+		puts(g_Find->name);
+		puts(g_pFind->tel);
+		puts(g_pFind->addr);
+		return;
+	}
+
+	if (addr_list(&addr))
+	{
+		g_bSaved = 0;
+		printf("\n등록되었습니다.\n\n");
+	}
+	else
+	{
+		printf("\n등록이 실패되었습니다.\n\n");
+	}
+}
+
+void Find_addr(void) {
+	char buff[100] = { 0, }
+	ADDR * plocal;
+
+	printf("\n\n검색할 이름/전화/주소의 일부를 입력하세요.\n");
+	printf("이름/전화/주소 : "); gets(buff);
+
+	if (strlen(buff) == 0)return;
+
+	SetHeadPosition();
+
+	plocal = g_pAddrHead;
+	g_pFInd = NULL;
+
+	while (plocal)
+	{
+		if (strstr(plocal->name, buff))/*이름을 검색*/
+		{
+			g_pFind = plocal;
+			break;
+		}
+
+		if (strstr(plocal->tel, buff)) /*전화를 검색*/
+		{
+			g_pFind = plocal;
+			break;
+		}
+
+		if (strstr(plocal->addr, buff)) /*주소를 검색*/
+		{
+			g_pFind = plocal;
+			break;
+		}
+		plocal = plocal->next;
+	}
+
+	if (g_pFind)
+	{
+		puts(g_pFInd->name);
+		puts(g_pFInd->tel);
+		puts(g_pFInd->addr);
+	}
+	else
+	{
+		printf("\n\n%s을 주소록에서 찾을 수 업습니다.\n\n", buff);
+	}
+}
+
+void Modify_addr(void)
+{
+	cahr name[100] = { 0, };
+	ADDR addr;
+
+	while (1)
+	{
+		printf("\n\n수정할 이름 : "); gets(name);
+
+		if (strlen(name) == 0)return;
+
+		if (find_list(name) == 0)
+		{
+			puts("수정할 이름을 찾을 수 없습니다.");
+			continue;
+		}
+		break;
+	}
+
+	printf("\n%s에 대한 주소 데이터는 아래와 같습니다.\n\n", name);
+	puts(g_pFind->name);
+	puts(g_Find->tel);
+	puts(g_pFind->addr);
+
+	printf("\n수정하려는 이름/전화/주소를 입력한 후 엔터를 치세요\n\n");
+
+	printf("이름 : "); gets(addr.name);
+	printf("전화 : "); gets(addr.tel);
+	printf("주소 : "); gets(addr.addr);
+
+	printf("\n%s에 대한 주소는 아래와 같습니다.\n\n", name);
+	puts(g_pFind->name);
+	puts(g_Find->tel);
+	puts(g_pFind->addr);
+
+	printf("\n수정하려는 이름/전화/주소를 입력한 후 엔터를 치세요\n\n");
+
+	printf("이름 : "); gets(addr.name);
+	printf("전화 : "); gets(addr.tel);
+	printf("주소 : "); gets(addr.addr);
+
+	if (strlen(add.name) == 0)strcpy(addr.name, name);
+
+	strcpy(g_pFind->name, addr.name);
+	strcpy(g_pFind->tel, addr.tel);
+	strcpy(g_pFind->addr, addr.addr);
+
+	g_bSaved = 0;
+
+	printf("%s에 대한 주소를 수정하였습니다.\n", name);
+}
