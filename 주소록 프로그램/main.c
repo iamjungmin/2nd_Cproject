@@ -1,6 +1,7 @@
 #pragma warning(disable:4996)
 #include<stdio.h>
 #include<string.h>
+#include<stdlib.h>
 #include<conio.h> //getch
 
 #define ADDRFILE "c:addrlist.txt"
@@ -15,13 +16,13 @@ typedef struct tagLinkedList
 	struct tagLinkedList* next;
 }ADDR;
 
-ADDR* g_gAddrHead = NULL;
-ADDR* g_Find;
+ADDR* g_pAddrHead = NULL;
+ADDR* g_pFind;
 int g_bSaved = 1;
 
 void get_addrlist(void);
 int add_list(const ADDR* addr);
-int find_list(const char* name)
+int find_list(const char* name);
 void SetHeadPosition(void);
 void SetTailPosition(void);
 
@@ -37,12 +38,12 @@ void main(void)
 {
 	int ch;
 
-	get_addlist();
+	get_addrlist();
 
 	puts("주소록 프로그램");
 
 	while (1) {
-		print("\n[1]등록[2]검색[3]수정[4]삭제[5]출력[S]저장[Q]종료");
+		printf("\n[1]등록[2]검색[3]수정[4]삭제[5]출력[S]저장[Q]종료");
 
 		ch = getch();
 
@@ -91,7 +92,7 @@ void get_addrlist(void)
 		{
 			fclose(fp);
 			perror("파일 읽기 에러");
-			return:
+			return;
 		}
 
 		if (feof(fp))break;
@@ -106,7 +107,7 @@ void get_addrlist(void)
 
 int add_list(const ADDR* addr)
 {
-	ADDR* plocal, * pn = g_pAddrHead;
+	ADDR* plocal, *pn = g_pAddrHead;
 	SetHeadPosition();
 
 	/*g_oAddHead가 초기화 되지 않은 경우,한 번만 실행됩니다.*/
@@ -156,13 +157,13 @@ void SetHeadPosition(void)
 
 	while (g_pAddrHead->prev)
 	{
-		g_pAddrHead = g_pAddHead->prev;
+		g_pAddrHead = g_pAddrHead->prev;
 	}
 }
 
 void SetTailPosition(void)
 {
-	if (g_pAddHead == NULL)return;
+	if (g_pAddrHead == NULL)return;
 
 	while (g_pAddrHead->next)
 	{
@@ -206,7 +207,7 @@ void Add_addr(void)
 	if (find_list(addr.name) == 1)
 	{
 		printf("\n이미 등록되어 있는 이름입니다\n\n");
-		puts(g_Find->name);
+		puts(g_pFind->name);
 		puts(g_pFind->tel);
 		puts(g_pFind->addr);
 		return;
@@ -224,8 +225,8 @@ void Add_addr(void)
 }
 
 void Find_addr(void) {
-	char buff[100] = { 0, }
-	ADDR * plocal;
+	char buff[100] = { 0, };
+	ADDR *plocal;
 
 	printf("\n\n검색할 이름/전화/주소의 일부를 입력하세요.\n");
 	printf("이름/전화/주소 : "); gets(buff);
@@ -235,7 +236,7 @@ void Find_addr(void) {
 	SetHeadPosition();
 
 	plocal = g_pAddrHead;
-	g_pFInd = NULL;
+	g_pFind = NULL;
 
 	while (plocal)
 	{
@@ -273,7 +274,7 @@ void Find_addr(void) {
 
 void Modify_addr(void)
 {
-	cahr name[100] = { 0, };
+	char name[100] = { 0, };
 	ADDR addr;
 
 	while (1)
@@ -292,7 +293,7 @@ void Modify_addr(void)
 
 	printf("\n%s에 대한 주소 데이터는 아래와 같습니다.\n\n", name);
 	puts(g_pFind->name);
-	puts(g_Find->tel);
+	puts(g_pFind->tel);
 	puts(g_pFind->addr);
 
 	printf("\n수정하려는 이름/전화/주소를 입력한 후 엔터를 치세요\n\n");
@@ -303,7 +304,7 @@ void Modify_addr(void)
 
 	printf("\n%s에 대한 주소는 아래와 같습니다.\n\n", name);
 	puts(g_pFind->name);
-	puts(g_Find->tel);
+	puts(g_pFind->tel);
 	puts(g_pFind->addr);
 
 	printf("\n수정하려는 이름/전화/주소를 입력한 후 엔터를 치세요\n\n");
@@ -312,7 +313,7 @@ void Modify_addr(void)
 	printf("전화 : "); gets(addr.tel);
 	printf("주소 : "); gets(addr.addr);
 
-	if (strlen(add.name) == 0)strcpy(addr.name, name);
+	if (strlen(addr.name) == 0) strcpy(addr.name, name);
 
 	strcpy(g_pFind->name, addr.name);
 	strcpy(g_pFind->tel, addr.tel);
@@ -384,8 +385,8 @@ void Delete_addr(void)
 			plocal = g_pFind->next;
 			plocal->next = g_pFind->prev;
 
-			free(g_Find);
-			g_AddrHead = plocal;
+			free(g_pFind);
+			g_pAddrHead = plocal;
 		}
 
 		g_bSaved = 0;
@@ -404,7 +405,7 @@ void Print_addr(void)
 	plocal = g_pAddrHead;
 
 	//plocal 리스트의 맨 처음으로 이동
-	whiile(plocal->prev)
+	while(plocal->prev)
 	{
 		plocal = plocal->prev;
 	}
@@ -447,7 +448,7 @@ void Save_addr(void)
 	{
 		plocal = g_pAddrHead -> next;
 
-		fwirte(g_pAddrHead, sizeof(ADDR), 1, fp)
+		fwirte(g_pAddrHead, sizeof(ADDR), 1, fp);
 
 			g_pAddrHead = plocal;
 	}
