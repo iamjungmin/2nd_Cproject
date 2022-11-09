@@ -26,13 +26,13 @@ int find_list(const char* name);
 void SetHeadPosition(void);
 void SetTailPosition(void);
 
-void Add_addr(void);
-void Find_addr(void);
-void Modify_addr(void);
-void Delete_addr(void);
-void Print_addr(void);
-void Save_addr(void);
-void Remove_addr(void);
+void Add_addr(void);				/*추가*/
+void Find_addr(void);				/*찾기*/
+void Modify_addr(void);			/*수정*/
+void Delete_addr(void);			/*삭제*/
+void Print_addr(void);				/*출력*/
+void Save_addr(void);				/*저장*/
+void Remove_addr(void);		/*해제*/
 
 void main(void)
 {
@@ -479,3 +479,33 @@ void Remove_addr(void)
 
 	g_pAddrHead = NULL; /*재사용을 하기 위한 초기화*/
 }
+
+/*
+	20 : 주소데이터 등록,수정,삭제할 때 값이 0이 되며, 종료할 때는 이 값이 0인 경우,모든 주소 데이터를 변경할 것인지 여부를 묻습니다.
+
+	61~66 : 주소 데이터가 변경되었다면 저장할 지 여부를 묻고, y를 누르는 경우에는 파일 주소에 데이터를 모두 저장합니다
+
+	74~107 : 파일로부터 주소 데이터를 이중 링크드 리스트에 읽어들입니다.
+
+	109~155 : 주소 데이터 하나를 이중 링크드 리스트에 추가합니다.
+
+	157~165 : g_pAddrHead를 첫번째 주소 데이터를 가리키도록 지정합니다.
+
+	167~175 : g_pAddrHead를 마지막 주소 데이터를 가리키도록 지정합니다.
+
+	177~196 : 주어진 이름이 주소록에 있는지 검색합니다.
+
+	198~229 : 한 명의 주소를 입력받아 주소록에 추가합니다.
+
+	231~279 : 이름,전화,주소를 검색하여 화면에 보여줍니다.
+
+	281~320 : 검색된 주소 데이터를 재입력받아 모두 수정합니다.
+
+	322~392 : 주소록에서 선택된 이름이 있는 주소 데이터를 삭제합니다.
+
+	394~424 : 모든 주소 데이터를 출력합니다.
+
+	426~457 : 이중 링크드 리스트에 있는 모든 주소 데이터를 파일에 저장합니다.
+
+	459~478: 이중 링크드 리스트에 할당된 모든 메모리를 해제합니다.
+*/
