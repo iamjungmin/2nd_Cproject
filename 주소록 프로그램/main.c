@@ -322,3 +322,74 @@ void Modify_addr(void)
 
 	printf("%s에 대한 주소를 수정하였습니다.\n", name);
 }
+
+void Delete_addr(void)
+{
+	char name[100] = { 0, };
+	ADDR* plocal;
+	int ch;
+
+	while (1)
+	{
+		printf("\n\n삭제할 이름 : "); gets(name);
+
+		if (strlen(name) == 0)return;
+
+		if (find_list(name) == 0)
+		{
+			puts("삭제할 이름을 찾을 수 없습니다.");
+			continue;
+		}
+		break;
+	}
+
+	puts(g_pFind->name);
+	puts(g_pFind->tel);
+	puts(g_pFind->addr);
+
+	printf("%s을 삭제하시겠습니까(y/n)?", name);
+	ch = getch();
+	fflush(stdin);
+
+	if (ch == 'Y' || ch == 'y')
+	{
+		if (g_pFind->prev == NULL) /*이전 데이터가 없는 경우*/
+		{
+			if (g_pFind->next == NULL) /*다음 데이터가 없는 경우*/
+			{
+				free(g_pFind);
+				g_pAddrHead = NULL;
+			}
+			else
+			{
+				plocal = g_pFind->next;
+				free(g_pFind);
+				plocal->prev = NULL;
+				g_pAddrHead = plocal;
+			}
+		}
+		else if (g_pFind->next == NULL) /*다음 데이터가 없는 경우*/
+		{
+			plocal = g_pFind->prev;
+			free(g_pFind);
+			plocal->next = NULL;
+			g_pAddrHead = plocal;
+		}
+
+		else
+		{
+			plocal = g_pFind->prev;
+			plocal->next = g_pFind->next;
+
+			plocal = g_pFind->next;
+			plocal->next = g_pFind->prev;
+
+			free(g_Find);
+			g_AddrHEad = plocal;
+		}
+
+		g_bSaved = 0;
+
+		printf("\n\n검색된 주소 데이터를 삭제하였습니다.\n\n");
+	}
+}
