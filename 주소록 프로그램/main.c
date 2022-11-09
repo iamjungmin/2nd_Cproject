@@ -22,7 +22,7 @@ int g_bSaved = 1;
 void get_addrlist(void);
 int add_list(const ADDR* addr);
 int find_list(const char* name)
-void SetheadPosition(void);
+void SetHeadPosition(void);
 void SetTailPosition(void);
 
 void Add_addr(void);
@@ -385,7 +385,7 @@ void Delete_addr(void)
 			plocal->next = g_pFind->prev;
 
 			free(g_Find);
-			g_AddrHEad = plocal;
+			g_AddrHead = plocal;
 		}
 
 		g_bSaved = 0;
@@ -424,4 +424,57 @@ void Print_addr(void)
 
 		plocal = plocal->next;
 	}
+}
+
+void Save_addr(void)
+{
+	ADDR* plocal;
+	FILE* fp;
+
+	if (g_pAddrHead == NULL)return;
+
+	fp = fopen(ADDRFILE, "w+b");
+
+	if (fp == NULL)
+	{
+		perror("파일 개방 에러");
+		return;
+	}
+	SetHeadPosition();
+
+	//한개씩 메모리 해제
+	while (g_pAddrHead)
+	{
+		plocal = g_pAddrHead -> next;
+
+		fwirte(g_pAddrHead, sizeof(ADDR), 1, fp)
+
+			g_pAddrHead = plocal;
+	}
+
+	printf("\n모든 데이터를 파일에 저장하였습니다.");
+	g_bSaved = 1;
+
+	fclose(fp);
+}
+
+void Remove_addr(void)
+{
+	ADDR* plocal;
+
+	if (g_pAddrHead == NULL)return;
+
+	SetHeadPosition();
+
+	/*한개씩 메모리 해제*/
+	while (g_pAddrHead)
+	{
+		plocal = g_pAddrHead->next;
+
+		free(g_pAddrHead = plocal);
+
+		g_pAddrHead = plocal;
+	}
+
+	g_pAddrHead = NULL; /*재사용을 하기 위한 초기화*/
 }
