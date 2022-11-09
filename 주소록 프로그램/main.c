@@ -262,7 +262,7 @@ void Find_addr(void) {
 
 	if (g_pFind)
 	{
-		puts(g_pFInd->name);
+		puts(g_pFind->name);
 		puts(g_pFInd->tel);
 		puts(g_pFInd->addr);
 	}
