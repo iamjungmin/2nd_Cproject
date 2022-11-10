@@ -26,12 +26,12 @@ int find_list(const char* name);
 void SetHeadPosition(void);
 void SetTailPosition(void);
 
-void Add_addr(void);				/*추가*/
-void Find_addr(void);				/*찾기*/
-void Modify_addr(void);			/*수정*/
-void Delete_addr(void);			/*삭제*/
-void Print_addr(void);				/*출력*/
-void Save_addr(void);				/*저장*/
+void Add_addr(void);		/*추가*/
+void Find_addr(void);		/*찾기*/
+void Modify_addr(void);		/*수정*/
+void Delete_addr(void);		/*삭제*/
+void Print_addr(void);		/*출력*/
+void Save_addr(void);		/*저장*/
 void Remove_addr(void);		/*해제*/
 
 void main(void)
