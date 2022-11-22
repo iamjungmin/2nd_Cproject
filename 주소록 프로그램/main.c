@@ -3,14 +3,15 @@
 #include<string.h>
 #include<stdlib.h>
 #include<conio.h> //getch
+//add_list ì—†ìŒ getsì—†ìŒ
 
 #define ADDRFILE "c:addrlist.txt"
 
 typedef struct tagLinkedList
 {
-	char name[30];/*ÀÌ¸§*/
-	char tel[30]; /*ÀüÈ­*/
-	char addr[100];/*ÁÖ¼Ò*/
+	char name[30];/*ì´ë¦„*/
+	char tel[30]; /*ì „í™”*/
+	char addr[100];/*ì£¼ì†Œ*/
 
 	struct tagLinkedList* prev;
 	struct tagLinkedList* next;
@@ -26,13 +27,13 @@ int find_list(const char* name);
 void SetHeadPosition(void);
 void SetTailPosition(void);
 
-void Add_addr(void);		/*Ãß°¡*/
-void Find_addr(void);		/*Ã£±â*/
-void Modify_addr(void);		/*¼öÁ¤*/
-void Delete_addr(void);		/*»èÁ¦*/
-void Print_addr(void);		/*Ãâ·Â*/
-void Save_addr(void);		/*ÀúÀå*/
-void Remove_addr(void);		/*ÇØÁ¦*/
+void Add_addr(void);		/*ì¶”ê°€*/
+void Find_addr(void);		/*ì°¾ê¸°*/
+void Modify_addr(void);		/*ìˆ˜ì •*/
+void Delete_addr(void);		/*ì‚­ì œ*/
+void Print_addr(void);		/*ì¶œë ¥*/
+void Save_addr(void);		/*ì €ìž¥*/
+void Remove_addr(void);		/*í•´ì œ*/
 
 void main(void)
 {
@@ -40,10 +41,10 @@ void main(void)
 
 	get_addrlist();
 
-	puts("ÁÖ¼Ò·Ï ÇÁ·Î±×·¥");
+	puts("ì£¼ì†Œë¡ í”„ë¡œê·¸ëž¨");
 
 	while (1) {
-		printf("\n[1]µî·Ï[2]°Ë»ö[3]¼öÁ¤[4]»èÁ¦[5]Ãâ·Â[S]ÀúÀå[Q]Á¾·á");
+		printf("\n[1]ë“±ë¡[2]ê²€ìƒ‰[3]ìˆ˜ì •[4]ì‚­ì œ[5]ì¶œë ¥[S]ì €ìž¥[Q]ì¢…ë£Œ");
 
 		ch = getch();
 
@@ -60,13 +61,13 @@ void main(void)
 		case 'Q':
 			if (g_bSaved == 0)
 			{
-				printf("\n\nº¯°æµÈ ÁÖ¼Ò µ¥ÀÌÅÍ¸¦ ÀúÀåÇÏ½Ã°Ú½À´Ï±î(y/n)?");
+				printf("\n\në³€ê²½ëœ ì£¼ì†Œ ë°ì´í„°ë¥¼ ì €ìž¥í•˜ì‹œê² ìŠµë‹ˆê¹Œ(y/n)?");
 				ch = getchar();
 				if (ch == 'Y' || ch == 'y')Save_addr();
 			}
 
 			Remove_addr(); return;
-		default:printf("\n\n1~5 ¶Ç´Â S/Q¸¦ ´©¸£½Ê½Ã¿À.\n\n"); break;
+		default:printf("\n\n1~5 ë˜ëŠ” S/Që¥¼ ëˆ„ë¥´ì‹­ì‹œì˜¤.\n\n"); break;
 		}
 	}
 }
@@ -80,7 +81,7 @@ void get_addrlist(void)
 
 	if (fp == NULL)
 	{
-		perror("ÆÄÀÏ °³¹æ ¿¡·¯");
+		perror("íŒŒì¼ ê°œë°© ì—ëŸ¬");
 		return;
 	}
 
@@ -91,7 +92,7 @@ void get_addrlist(void)
 		if (ferror(fp))
 		{
 			fclose(fp);
-			perror("ÆÄÀÏ ÀÐ±â ¿¡·¯");
+			perror("íŒŒì¼ ì½ê¸° ì—ëŸ¬");
 			return;
 		}
 
@@ -99,7 +100,7 @@ void get_addrlist(void)
 
 		if (add_list(&addr) == 0)
 		{
-			printf("ÁÖ¼Ò µ¥ÀÌÅÍ¸¦ ÀúÀåÇÒ ¼ö ¾÷½À´Ï´Ù.\n");
+			printf("ì£¼ì†Œ ë°ì´í„°ë¥¼ ì €ìž¥í•  ìˆ˜ ì—…ìŠµë‹ˆë‹¤.\n");
 		}
 	}
 	fclose(fp);
@@ -107,13 +108,13 @@ void get_addrlist(void)
 
 int add_list(const ADDR* addr)
 {
-	ADDR* plocal, *pn = g_pAddrHead;
+	ADDR* plocal, * pn = g_pAddrHead;
 	SetHeadPosition();
 
-	/*g_oAddHead°¡ ÃÊ±âÈ­ µÇÁö ¾ÊÀº °æ¿ì,ÇÑ ¹ø¸¸ ½ÇÇàµË´Ï´Ù.*/
+	/*g_oAddHeadê°€ ì´ˆê¸°í™” ë˜ì§€ ì•Šì€ ê²½ìš°,í•œ ë²ˆë§Œ ì‹¤í–‰ë©ë‹ˆë‹¤.*/
 	if (g_pAddrHead == NULL)
 	{
-		plocal = malloc(sizeof(ADDR));/*ADDR ±¸Á¶Ã¼ ÇÒ´ç*/
+		plocal = malloc(sizeof(ADDR));/*ADDR êµ¬ì¡°ì²´ í• ë‹¹*/
 		memset(plocal, 0, sizeof(ADDR));
 
 		if (plocal == NULL)
@@ -122,12 +123,12 @@ int add_list(const ADDR* addr)
 		}
 
 		g_pAddrHead = plocal;
-		g_pAddrHead->prev = NULL;/*Ã³À½¿¡´Â  ¹Ýµå½Ã NULL·Î ÃÊ±âÈ­*/
-		g_pAddrHead->next = NULL;/*Ã³À½¿¡´Â ¹Ýµå½Ã NULL·Î ÃÊ±âÈ­*/
+		g_pAddrHead->prev = NULL;/*ì²˜ìŒì—ëŠ”  ë°˜ë“œì‹œ NULLë¡œ ì´ˆê¸°í™”*/
+		g_pAddrHead->next = NULL;/*ì²˜ìŒì—ëŠ” ë°˜ë“œì‹œ NULLë¡œ ì´ˆê¸°í™”*/
 	}
-	else /*g_AddrHead°¡ ÃÖ±âÈ­µÈ ÈÄ °è¼Ó ½ÇÇàµË´Ï´Ù.*/
+	else /*g_AddrHeadê°€ ìµœê¸°í™”ëœ í›„ ê³„ì† ì‹¤í–‰ë©ë‹ˆë‹¤.*/
 	{
-		plocal = malloc(sizeof(ADDR));/*ADDR ±¸Á¶Ã¼ ÇÒ´ç*/
+		plocal = malloc(sizeof(ADDR));/*ADDR êµ¬ì¡°ì²´ í• ë‹¹*/
 		memset(plocal, 0, sizeof(ADDR));
 
 		if (plocal == NULL)
@@ -175,13 +176,13 @@ int find_list(const char* name)
 {
 	ADDR* plocal;
 
-	SetHeadPosition(); /*g_AddrHead¸¦ Ã¹ ÁÖ¼Ò µ¥ÀÌÅÍ¸¦ °¡¸®Å°µµ·Ï ÁöÁ¤*/
+	SetHeadPosition(); /*g_AddrHeadë¥¼ ì²« ì£¼ì†Œ ë°ì´í„°ë¥¼ ê°€ë¦¬í‚¤ë„ë¡ ì§€ì •*/
 
 	plocal = g_pAddrHead;
 
 	while (plocal)
 	{
-		if (strstr(plocal->name, name)) /*ÀÌ¸§À» °Ë»ö*/
+		if (strstr(plocal->name, name)) /*ì´ë¦„ì„ ê²€ìƒ‰*/
 		{
 			g_pFind = plocal;
 			return 1;
@@ -197,39 +198,40 @@ void Add_addr(void)
 
 	memset(&addr, 0, sizeof(ADDR));
 
-	printf("\n\nµî·ÏÇÒ ÀÌ¸§: "); gets(addr.name);
+	printf("\n\në“±ë¡í•  ì´ë¦„: "); 
+	gets(addr.name);
 
 	if (strlen(addr.name) == 0)return;
 
-	printf("µî·ÏÇÒ ÀüÈ­ : "); gets(addr.tel);
-	printf("µî·ÏÇÒ ÁÖ¼Ò : "); gets(addr.addr);
+	printf("ë“±ë¡í•  ì „í™” : "); gets(addr.tel);
+	printf("ë“±ë¡í•  ì£¼ì†Œ : "); gets(addr.addr);
 
 	if (find_list(addr.name) == 1)
 	{
-		printf("\nÀÌ¹Ì µî·ÏµÇ¾î ÀÖ´Â ÀÌ¸§ÀÔ´Ï´Ù\n\n");
+		printf("\nì´ë¯¸ ë“±ë¡ë˜ì–´ ìžˆëŠ” ì´ë¦„ìž…ë‹ˆë‹¤\n\n");
 		puts(g_pFind->name);
 		puts(g_pFind->tel);
 		puts(g_pFind->addr);
 		return;
 	}
 
-	if (addr_list(&addr))
+	if (add_list(&addr))
 	{
 		g_bSaved = 0;
-		printf("\nµî·ÏµÇ¾ú½À´Ï´Ù.\n\n");
+		printf("\në“±ë¡ë˜ì—ˆìŠµë‹ˆë‹¤.\n\n");
 	}
 	else
 	{
-		printf("\nµî·ÏÀÌ ½ÇÆÐµÇ¾ú½À´Ï´Ù.\n\n");
+		printf("\në“±ë¡ì´ ì‹¤íŒ¨ë˜ì—ˆìŠµë‹ˆë‹¤.\n\n");
 	}
 }
 
 void Find_addr(void) {
 	char buff[100] = { 0, };
-	ADDR *plocal;
+	ADDR* plocal;
 
-	printf("\n\n°Ë»öÇÒ ÀÌ¸§/ÀüÈ­/ÁÖ¼ÒÀÇ ÀÏºÎ¸¦ ÀÔ·ÂÇÏ¼¼¿ä.\n");
-	printf("ÀÌ¸§/ÀüÈ­/ÁÖ¼Ò : "); gets(buff);
+	printf("\n\nê²€ìƒ‰í•  ì´ë¦„/ì „í™”/ì£¼ì†Œì˜ ì¼ë¶€ë¥¼ ìž…ë ¥í•˜ì„¸ìš”.\n");
+	printf("ì´ë¦„/ì „í™”/ì£¼ì†Œ : "); gets(buff);
 
 	if (strlen(buff) == 0)return;
 
@@ -240,19 +242,19 @@ void Find_addr(void) {
 
 	while (plocal)
 	{
-		if (strstr(plocal->name, buff))/*ÀÌ¸§À» °Ë»ö*/
+		if (strstr(plocal->name, buff))/*ì´ë¦„ì„ ê²€ìƒ‰*/
 		{
 			g_pFind = plocal;
 			break;
 		}
 
-		if (strstr(plocal->tel, buff)) /*ÀüÈ­¸¦ °Ë»ö*/
+		if (strstr(plocal->tel, buff)) /*ì „í™”ë¥¼ ê²€ìƒ‰*/
 		{
 			g_pFind = plocal;
 			break;
 		}
 
-		if (strstr(plocal->addr, buff)) /*ÁÖ¼Ò¸¦ °Ë»ö*/
+		if (strstr(plocal->addr, buff)) /*ì£¼ì†Œë¥¼ ê²€ìƒ‰*/
 		{
 			g_pFind = plocal;
 			break;
@@ -268,7 +270,7 @@ void Find_addr(void) {
 	}
 	else
 	{
-		printf("\n\n%sÀ» ÁÖ¼Ò·Ï¿¡¼­ Ã£À» ¼ö ¾÷½À´Ï´Ù.\n\n", buff);
+		printf("\n\n%sì„ ì£¼ì†Œë¡ì—ì„œ ì°¾ì„ ìˆ˜ ì—…ìŠµë‹ˆë‹¤.\n\n", buff);
 	}
 }
 
@@ -279,39 +281,39 @@ void Modify_addr(void)
 
 	while (1)
 	{
-		printf("\n\n¼öÁ¤ÇÒ ÀÌ¸§ : "); gets(name);
+		printf("\n\nìˆ˜ì •í•  ì´ë¦„ : "); gets(name);
 
 		if (strlen(name) == 0)return;
 
 		if (find_list(name) == 0)
 		{
-			puts("¼öÁ¤ÇÒ ÀÌ¸§À» Ã£À» ¼ö ¾ø½À´Ï´Ù.");
+			puts("ìˆ˜ì •í•  ì´ë¦„ì„ ì°¾ì„ ìˆ˜ ì—†ìŠµë‹ˆë‹¤.");
 			continue;
 		}
 		break;
 	}
 
-	printf("\n%s¿¡ ´ëÇÑ ÁÖ¼Ò µ¥ÀÌÅÍ´Â ¾Æ·¡¿Í °°½À´Ï´Ù.\n\n", name);
+	printf("\n%sì— ëŒ€í•œ ì£¼ì†Œ ë°ì´í„°ëŠ” ì•„ëž˜ì™€ ê°™ìŠµë‹ˆë‹¤.\n\n", name);
 	puts(g_pFind->name);
 	puts(g_pFind->tel);
 	puts(g_pFind->addr);
 
-	printf("\n¼öÁ¤ÇÏ·Á´Â ÀÌ¸§/ÀüÈ­/ÁÖ¼Ò¸¦ ÀÔ·ÂÇÑ ÈÄ ¿£ÅÍ¸¦ Ä¡¼¼¿ä\n\n");
+	printf("\nìˆ˜ì •í•˜ë ¤ëŠ” ì´ë¦„/ì „í™”/ì£¼ì†Œë¥¼ ìž…ë ¥í•œ í›„ ì—”í„°ë¥¼ ì¹˜ì„¸ìš”\n\n");
 
-	printf("ÀÌ¸§ : "); gets(addr.name);
-	printf("ÀüÈ­ : "); gets(addr.tel);
-	printf("ÁÖ¼Ò : "); gets(addr.addr);
+	printf("ì´ë¦„ : "); gets(addr.name);
+	printf("ì „í™” : "); gets(addr.tel);
+	printf("ì£¼ì†Œ : "); gets(addr.addr);
 
-	printf("\n%s¿¡ ´ëÇÑ ÁÖ¼Ò´Â ¾Æ·¡¿Í °°½À´Ï´Ù.\n\n", name);
+	printf("\n%sì— ëŒ€í•œ ì£¼ì†ŒëŠ” ì•„ëž˜ì™€ ê°™ìŠµë‹ˆë‹¤.\n\n", name);
 	puts(g_pFind->name);
 	puts(g_pFind->tel);
 	puts(g_pFind->addr);
 
-	printf("\n¼öÁ¤ÇÏ·Á´Â ÀÌ¸§/ÀüÈ­/ÁÖ¼Ò¸¦ ÀÔ·ÂÇÑ ÈÄ ¿£ÅÍ¸¦ Ä¡¼¼¿ä\n\n");
+	printf("\nìˆ˜ì •í•˜ë ¤ëŠ” ì´ë¦„/ì „í™”/ì£¼ì†Œë¥¼ ìž…ë ¥í•œ í›„ ì—”í„°ë¥¼ ì¹˜ì„¸ìš”\n\n");
 
-	printf("ÀÌ¸§ : "); gets(addr.name);
-	printf("ÀüÈ­ : "); gets(addr.tel);
-	printf("ÁÖ¼Ò : "); gets(addr.addr);
+	printf("ì´ë¦„ : "); gets(addr.name);
+	printf("ì „í™” : "); gets(addr.tel);
+	printf("ì£¼ì†Œ : "); gets(addr.addr);
 
 	if (strlen(addr.name) == 0) strcpy(addr.name, name);
 
@@ -321,7 +323,7 @@ void Modify_addr(void)
 
 	g_bSaved = 0;
 
-	printf("%s¿¡ ´ëÇÑ ÁÖ¼Ò¸¦ ¼öÁ¤ÇÏ¿´½À´Ï´Ù.\n", name);
+	printf("%sì— ëŒ€í•œ ì£¼ì†Œë¥¼ ìˆ˜ì •í•˜ì˜€ìŠµë‹ˆë‹¤.\n", name);
 }
 
 void Delete_addr(void)
@@ -332,13 +334,13 @@ void Delete_addr(void)
 
 	while (1)
 	{
-		printf("\n\n»èÁ¦ÇÒ ÀÌ¸§ : "); gets(name);
+		printf("\n\nì‚­ì œí•  ì´ë¦„ : "); gets(name);
 
 		if (strlen(name) == 0)return;
 
 		if (find_list(name) == 0)
 		{
-			puts("»èÁ¦ÇÒ ÀÌ¸§À» Ã£À» ¼ö ¾ø½À´Ï´Ù.");
+			puts("ì‚­ì œí•  ì´ë¦„ì„ ì°¾ì„ ìˆ˜ ì—†ìŠµë‹ˆë‹¤.");
 			continue;
 		}
 		break;
@@ -348,15 +350,15 @@ void Delete_addr(void)
 	puts(g_pFind->tel);
 	puts(g_pFind->addr);
 
-	printf("%sÀ» »èÁ¦ÇÏ½Ã°Ú½À´Ï±î(y/n)?", name);
+	printf("%sì„ ì‚­ì œí•˜ì‹œê² ìŠµë‹ˆê¹Œ(y/n)?", name);
 	ch = getch();
 	fflush(stdin);
 
 	if (ch == 'Y' || ch == 'y')
 	{
-		if (g_pFind->prev == NULL) /*ÀÌÀü µ¥ÀÌÅÍ°¡ ¾ø´Â °æ¿ì*/
+		if (g_pFind->prev == NULL) /*ì´ì „ ë°ì´í„°ê°€ ì—†ëŠ” ê²½ìš°*/
 		{
-			if (g_pFind->next == NULL) /*´ÙÀ½ µ¥ÀÌÅÍ°¡ ¾ø´Â °æ¿ì*/
+			if (g_pFind->next == NULL) /*ë‹¤ìŒ ë°ì´í„°ê°€ ì—†ëŠ” ê²½ìš°*/
 			{
 				free(g_pFind);
 				g_pAddrHead = NULL;
@@ -369,7 +371,7 @@ void Delete_addr(void)
 				g_pAddrHead = plocal;
 			}
 		}
-		else if (g_pFind->next == NULL) /*´ÙÀ½ µ¥ÀÌÅÍ°¡ ¾ø´Â °æ¿ì*/
+		else if (g_pFind->next == NULL) /*ë‹¤ìŒ ë°ì´í„°ê°€ ì—†ëŠ” ê²½ìš°*/
 		{
 			plocal = g_pFind->prev;
 			free(g_pFind);
@@ -391,7 +393,7 @@ void Delete_addr(void)
 
 		g_bSaved = 0;
 
-		printf("\n\n°Ë»öµÈ ÁÖ¼Ò µ¥ÀÌÅÍ¸¦ »èÁ¦ÇÏ¿´½À´Ï´Ù.\n\n");
+		printf("\n\nê²€ìƒ‰ëœ ì£¼ì†Œ ë°ì´í„°ë¥¼ ì‚­ì œí•˜ì˜€ìŠµë‹ˆë‹¤.\n\n");
 	}
 }
 
@@ -404,23 +406,23 @@ void Print_addr(void)
 
 	plocal = g_pAddrHead;
 
-	//plocal ¸®½ºÆ®ÀÇ ¸Ç Ã³À½À¸·Î ÀÌµ¿
-	while(plocal->prev)
+	//plocal ë¦¬ìŠ¤íŠ¸ì˜ ë§¨ ì²˜ìŒìœ¼ë¡œ ì´ë™
+	while (plocal->prev)
 	{
 		plocal = plocal->prev;
 	}
 
 	printf("\n\n");
 
-	//ÇÑ°³¾¿ Ãâ·Â
+	//í•œê°œì”© ì¶œë ¥
 	while (plocal)
 	{
-		printf("¹øÈ£.%d\n", count++);
+		printf("ë²ˆí˜¸.%d\n", count++);
 		puts(plocal->name);
 		puts(plocal->tel);
 		printf("%s \n\n", plocal->addr);
 
-		printf("¾Æ¹«Å°³ª ´©¸£¼¼¿ä,(Á¤Áö:q)\n\n");
+		printf("ì•„ë¬´í‚¤ë‚˜ ëˆ„ë¥´ì„¸ìš”,(ì •ì§€:q)\n\n");
 		if (getch() == 'q')return;
 
 		plocal = plocal->next;
@@ -438,22 +440,22 @@ void Save_addr(void)
 
 	if (fp == NULL)
 	{
-		perror("ÆÄÀÏ °³¹æ ¿¡·¯");
+		perror("íŒŒì¼ ê°œë°© ì—ëŸ¬");
 		return;
 	}
 	SetHeadPosition();
 
-	//ÇÑ°³¾¿ ¸Þ¸ð¸® ÇØÁ¦
+	//í•œê°œì”© ë©”ëª¨ë¦¬ í•´ì œ
 	while (g_pAddrHead)
 	{
-		plocal = g_pAddrHead -> next;
+		plocal = g_pAddrHead->next;
 
-		fwirte(g_pAddrHead, sizeof(ADDR), 1, fp);
+		fwrite(g_pAddrHead, sizeof(ADDR), 1, fp);
 
-			g_pAddrHead = plocal;
+		g_pAddrHead = plocal;
 	}
 
-	printf("\n¸ðµç µ¥ÀÌÅÍ¸¦ ÆÄÀÏ¿¡ ÀúÀåÇÏ¿´½À´Ï´Ù.");
+	printf("\nëª¨ë“  ë°ì´í„°ë¥¼ íŒŒì¼ì— ì €ìž¥í•˜ì˜€ìŠµë‹ˆë‹¤.");
 	g_bSaved = 1;
 
 	fclose(fp);
@@ -467,7 +469,7 @@ void Remove_addr(void)
 
 	SetHeadPosition();
 
-	/*ÇÑ°³¾¿ ¸Þ¸ð¸® ÇØÁ¦*/
+	/*í•œê°œì”© ë©”ëª¨ë¦¬ í•´ì œ*/
 	while (g_pAddrHead)
 	{
 		plocal = g_pAddrHead->next;
@@ -477,35 +479,22 @@ void Remove_addr(void)
 		g_pAddrHead = plocal;
 	}
 
-	g_pAddrHead = NULL; /*Àç»ç¿ëÀ» ÇÏ±â À§ÇÑ ÃÊ±âÈ­*/
+	g_pAddrHead = NULL; /*ìž¬ì‚¬ìš©ì„ í•˜ê¸° ìœ„í•œ ì´ˆê¸°í™”*/
 }
 
 /*
-	20 : ÁÖ¼Òµ¥ÀÌÅÍ µî·Ï,¼öÁ¤,»èÁ¦ÇÒ ¶§ °ªÀÌ 0ÀÌ µÇ¸ç, Á¾·áÇÒ ¶§´Â ÀÌ °ªÀÌ 0ÀÎ °æ¿ì,¸ðµç ÁÖ¼Ò µ¥ÀÌÅÍ¸¦ º¯°æÇÒ °ÍÀÎÁö ¿©ºÎ¸¦ ¹¯½À´Ï´Ù.
-
-	61~66 : ÁÖ¼Ò µ¥ÀÌÅÍ°¡ º¯°æµÇ¾ú´Ù¸é ÀúÀåÇÒ Áö ¿©ºÎ¸¦ ¹¯°í, y¸¦ ´©¸£´Â °æ¿ì¿¡´Â ÆÄÀÏ ÁÖ¼Ò¿¡ µ¥ÀÌÅÍ¸¦ ¸ðµÎ ÀúÀåÇÕ´Ï´Ù
-
-	74~106 : ÆÄÀÏ·ÎºÎÅÍ ÁÖ¼Ò µ¥ÀÌÅÍ¸¦ ÀÌÁß ¸µÅ©µå ¸®½ºÆ®¿¡ ÀÐ¾îµéÀÔ´Ï´Ù.
-
-	108~152 : ÁÖ¼Ò µ¥ÀÌÅÍ ÇÏ³ª¸¦ ÀÌÁß ¸µÅ©µå ¸®½ºÆ®¿¡ Ãß°¡ÇÕ´Ï´Ù.
-
-	154~162 : g_pAddrHead¸¦ Ã¹¹øÂ° ÁÖ¼Ò µ¥ÀÌÅÍ¸¦ °¡¸®Å°µµ·Ï ÁöÁ¤ÇÕ´Ï´Ù.
-
-	164~172 : g_pAddrHead¸¦ ¸¶Áö¸· ÁÖ¼Ò µ¥ÀÌÅÍ¸¦ °¡¸®Å°µµ·Ï ÁöÁ¤ÇÕ´Ï´Ù.
-
-	174~192 : ÁÖ¾îÁø ÀÌ¸§ÀÌ ÁÖ¼Ò·Ï¿¡ ÀÖ´ÂÁö °Ë»öÇÕ´Ï´Ù.
-
-	194~225 : ÇÑ ¸íÀÇ ÁÖ¼Ò¸¦ ÀÔ·Â¹Þ¾Æ ÁÖ¼Ò·Ï¿¡ Ãß°¡ÇÕ´Ï´Ù.
-
-	227~273 : ÀÌ¸§,ÀüÈ­,ÁÖ¼Ò¸¦ °Ë»öÇÏ¿© È­¸é¿¡ º¸¿©ÁÝ´Ï´Ù.
-
-	275~325 : °Ë»öµÈ ÁÖ¼Ò µ¥ÀÌÅÍ¸¦ ÀçÀÔ·Â¹Þ¾Æ ¸ðµÎ ¼öÁ¤ÇÕ´Ï´Ù.
-
-	327~396 : ÁÖ¼Ò·Ï¿¡¼­ ¼±ÅÃµÈ ÀÌ¸§ÀÌ ÀÖ´Â ÁÖ¼Ò µ¥ÀÌÅÍ¸¦ »èÁ¦ÇÕ´Ï´Ù.
-
-	398~428 : ¸ðµç ÁÖ¼Ò µ¥ÀÌÅÍ¸¦ Ãâ·ÂÇÕ´Ï´Ù.
-
-	430~460 : ÀÌÁß ¸µÅ©µå ¸®½ºÆ®¿¡ ÀÖ´Â ¸ðµç ÁÖ¼Ò µ¥ÀÌÅÍ¸¦ ÆÄÀÏ¿¡ ÀúÀåÇÕ´Ï´Ù.
-
-	462~481: ÀÌÁß ¸µÅ©µå ¸®½ºÆ®¿¡ ÇÒ´çµÈ ¸ðµç ¸Þ¸ð¸®¸¦ ÇØÁ¦ÇÕ´Ï´Ù.
+	20 : ì£¼ì†Œë°ì´í„° ë“±ë¡,ìˆ˜ì •,ì‚­ì œí•  ë•Œ ê°’ì´ 0ì´ ë˜ë©°, ì¢…ë£Œí•  ë•ŒëŠ” ì´ ê°’ì´ 0ì¸ ê²½ìš°,ëª¨ë“  ì£¼ì†Œ ë°ì´í„°ë¥¼ ë³€ê²½í•  ê²ƒì¸ì§€ ì—¬ë¶€ë¥¼ ë¬»ìŠµë‹ˆë‹¤.
+	61~66 : ì£¼ì†Œ ë°ì´í„°ê°€ ë³€ê²½ë˜ì—ˆë‹¤ë©´ ì €ìž¥í•  ì§€ ì—¬ë¶€ë¥¼ ë¬»ê³ , yë¥¼ ëˆ„ë¥´ëŠ” ê²½ìš°ì—ëŠ” íŒŒì¼ ì£¼ì†Œì— ë°ì´í„°ë¥¼ ëª¨ë‘ ì €ìž¥í•©ë‹ˆë‹¤
+	74~106 : íŒŒì¼ë¡œë¶€í„° ì£¼ì†Œ ë°ì´í„°ë¥¼ ì´ì¤‘ ë§í¬ë“œ ë¦¬ìŠ¤íŠ¸ì— ì½ì–´ë“¤ìž…ë‹ˆë‹¤.
+	108~152 : ì£¼ì†Œ ë°ì´í„° í•˜ë‚˜ë¥¼ ì´ì¤‘ ë§í¬ë“œ ë¦¬ìŠ¤íŠ¸ì— ì¶”ê°€í•©ë‹ˆë‹¤.
+	154~162 : g_pAddrHeadë¥¼ ì²«ë²ˆì§¸ ì£¼ì†Œ ë°ì´í„°ë¥¼ ê°€ë¦¬í‚¤ë„ë¡ ì§€ì •í•©ë‹ˆë‹¤.
+	164~172 : g_pAddrHeadë¥¼ ë§ˆì§€ë§‰ ì£¼ì†Œ ë°ì´í„°ë¥¼ ê°€ë¦¬í‚¤ë„ë¡ ì§€ì •í•©ë‹ˆë‹¤.
+	174~192 : ì£¼ì–´ì§„ ì´ë¦„ì´ ì£¼ì†Œë¡ì— ìžˆëŠ”ì§€ ê²€ìƒ‰í•©ë‹ˆë‹¤.
+	194~225 : í•œ ëª…ì˜ ì£¼ì†Œë¥¼ ìž…ë ¥ë°›ì•„ ì£¼ì†Œë¡ì— ì¶”ê°€í•©ë‹ˆë‹¤.
+	227~273 : ì´ë¦„,ì „í™”,ì£¼ì†Œë¥¼ ê²€ìƒ‰í•˜ì—¬ í™”ë©´ì— ë³´ì—¬ì¤ë‹ˆë‹¤.
+	275~325 : ê²€ìƒ‰ëœ ì£¼ì†Œ ë°ì´í„°ë¥¼ ìž¬ìž…ë ¥ë°›ì•„ ëª¨ë‘ ìˆ˜ì •í•©ë‹ˆë‹¤.
+	327~396 : ì£¼ì†Œë¡ì—ì„œ ì„ íƒëœ ì´ë¦„ì´ ìžˆëŠ” ì£¼ì†Œ ë°ì´í„°ë¥¼ ì‚­ì œí•©ë‹ˆë‹¤.
+	398~428 : ëª¨ë“  ì£¼ì†Œ ë°ì´í„°ë¥¼ ì¶œë ¥í•©ë‹ˆë‹¤.
+	430~460 : ì´ì¤‘ ë§í¬ë“œ ë¦¬ìŠ¤íŠ¸ì— ìžˆëŠ” ëª¨ë“  ì£¼ì†Œ ë°ì´í„°ë¥¼ íŒŒì¼ì— ì €ìž¥í•©ë‹ˆë‹¤.
+	462~481: ì´ì¤‘ ë§í¬ë“œ ë¦¬ìŠ¤íŠ¸ì— í• ë‹¹ëœ ëª¨ë“  ë©”ëª¨ë¦¬ë¥¼ í•´ì œí•©ë‹ˆë‹¤.
 */
